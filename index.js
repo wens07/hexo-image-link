@@ -1,24 +1,24 @@
 'use strict';
 
-// match markdown image and covert to asset_img 
+// match markdown image and covert to asset_img
 hexo.extend.filter.register('before_post_render', function(data){
 
     data.content = data.content.replace(/!{1}\[([^\[\]]*)\]\((.*)\s?(?:".*")?\)/g,
         function(match_str, label, path){
 
-            // if only one /
-            if( (path.split("/")).length == 2){
+            let len = path.split("/").length;
+            if( len == 3  && path.substring(0,2) == "./" ){//if  using  asset folder(post_asset_folder: true)
                 console.debug("Markdown Image Path: " + match_str);
-                console.debug("asset_img string: " + "{% asset_img " + (path.split("/"))[1] + " " +  label + " %}" );
-                return "{% asset_img \"" + (path.split("/"))[1] + "\" \"" +  label + "\" %}" 
-            }else if( (path.split("/")).length == 3  && path.substring(0,2) == "./" ){
+                return "{% asset_img \"" + (path.split("/"))[2] + "\" \"" +  label + "\" %}"
+            } else if (len > 3  && path.substring(0,7) == "/source") { // using global image config
                 console.debug("Markdown Image Path: " + match_str);
-                return "{% asset_img \"" + (path.split("/"))[2] + "\" \"" +  label + "\" %}" 
-            }else{
+                let modified_match_str = match_str.replace('/source', '');
+                return modified_match_str;
+            } else{
                 console.debug(match_str);
                 console.debug("Label :"+label);
                 console.debug(path);
-                console.debug("Markdown Image Path does not exists!");
+                console.debug("Markdown Image Path Pattern Error! ");
                 return match_str;
             }
 
