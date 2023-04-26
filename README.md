@@ -22,6 +22,8 @@ update link as:-->/.cn//image-20200314080935503.png
 
 ```sh
 $ npm install hexo-image-link --save
+or
+$ npm install git@github.com:wens07/hexo-image-link.git --save
 ```
 
 Enable `hexo-asset-folder: true`.
